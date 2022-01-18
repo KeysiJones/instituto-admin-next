@@ -30,18 +30,18 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
     setValue(cursoArray);
   }, [aulas, diaSemana]);
   const dia = {
-    terca: "terça",
-    quarta: "quarta",
-    quinta: "quinta",
-    sabado: "sábado",
+    terca: "Terça",
+    quarta: "Quarta",
+    quinta: "Quinta",
+    sabado: "Sábado",
   };
 
   return (
     <div id={diaSemana}>
-      <p className="my-12 text-5xl text-blue-400">Aulas de {dia[diaSemana]}</p>
+      <p className="my-12 text-4xl text-blue-400">{dia[diaSemana]}</p>
       <button
         onClick={() => handleInsertion()}
-        className="bg-blue-500 p-2 text-white rounded-t-xl outline-none font-bold"
+        className="bg-blue-500 p-1 text-white rounded-t-xl outline-none font-bold"
       >
         Cadastrar nova aula de {dia[diaSemana]}
       </button>
@@ -52,7 +52,7 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
       >
         <table className="w-full">
           <thead>
-            <tr style={{ backgroundColor: "dodgerblue" }}>
+            <tr className="bg-blue-500" style={{ backgroundColor: "#3B82F6" }}>
               <th>Curso</th>
               <th>Horário</th>
               <th>Link</th>
@@ -63,44 +63,44 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
           <tbody>
             {inserting ? (
               <tr>
-                <td className="p-2">
+                <td className="p-1">
                   <input
                     autocomplete="off"
                     name="nome-novo-curso"
                     placeholder="Ex: Doutrina e Convênios"
                     type="text"
                     onChange={handleChange}
-                    className="text-black rounded-md p-2 outline-none"
+                    className="text-black rounded-md p-1 outline-none"
                   />
                 </td>
-                <td className="p-2">
+                <td className="p-1">
                   <input
                     autocomplete="off"
                     name="horario-novo-curso"
                     placeholder="Ex: 09h30"
                     type="text"
                     onChange={handleChange}
-                    className="text-black rounded-md p-2 w-32 outline-none"
+                    className="text-black rounded-md p-1 w-32 outline-none"
                   />
                 </td>
-                <td className="p-2">
+                <td className="p-1">
                   <input
                     autocomplete="off"
                     name="link-novo-curso"
                     placeholder="Ex: https://zoom.us/j/95927244033?"
                     type="text"
                     onChange={handleChange}
-                    className="text-black rounded-md p-2 w-full outline-none"
+                    className="text-black rounded-md p-1 w-full outline-none"
                   />
                 </td>
-                <td className="p-2">
+                <td className="p-1">
                   <button
                     onClick={() => {
                       if (
                         // eslint-disable-next-line no-restricted-globals
                         confirm("Deseja salvar as alterações realizadas ?")
                       ) {
-                        setInserting(!inserting);
+                        setInserting(false);
                         let payload = {
                           diaSemana: diaSemana,
                           novaAula: {
@@ -143,15 +143,15 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
                           .catch((err) => console.log(err));
                       }
                     }}
-                    className="p-4 bg-blue-500 rounded-2xl m-2 font-bold"
+                    className="p-1 bg-blue-500 rounded-2xl m-2 font-bold"
                   >
                     Salvar
                   </button>
                 </td>
-                <td className="p-2">
+                <td className="p-1">
                   <button
                     onClick={() => setInserting(false)}
-                    className="p-4 bg-red-400 rounded-2xl m-2 font-bold"
+                    className="p-1 bg-red-400 rounded-2xl m-2 font-bold"
                   >
                     Cancelar
                   </button>
@@ -161,7 +161,7 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
             {aulas.map((curso) => {
               return (
                 <tr key={curso.id}>
-                  <td id={`${diaSemana}-${curso.id}`} className="p-2">
+                  <td id={`${diaSemana}-${curso.id}`} className="p-1">
                     {editableRow === `${diaSemana}-${curso.id}` && edit ? (
                       <input
                         autocomplete="off"
@@ -170,7 +170,7 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
                         type="text"
                         onChange={handleChange}
                         value={value[`${diaSemana}-nome-${curso.id}`]}
-                        className="text-black rounded-md p-2 outline-none"
+                        className="text-black rounded-md p-1 outline-none"
                       />
                     ) : (
                       <p>
@@ -178,7 +178,7 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
                       </p>
                     )}
                   </td>
-                  <td id={`horario-${diaSemana}-${curso.id}`} className="p-2">
+                  <td id={`horario-${diaSemana}-${curso.id}`} className="p-1">
                     {editableRow === `${diaSemana}-${curso.id}` && edit ? (
                       <input
                         autocomplete="off"
@@ -188,7 +188,7 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
                         type="text"
                         onChange={handleChange}
                         value={value[`${diaSemana}-horario-${curso.id}`] ?? ""}
-                        className="text-black rounded-md p-2 w-32 outline-none"
+                        className="text-black rounded-md p-1 w-32 outline-none"
                       />
                     ) : (
                       <p>
@@ -197,7 +197,7 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
                       </p>
                     )}
                   </td>
-                  <td id={`link-${diaSemana}-${curso.id}`} className="p-2">
+                  <td id={`link-${diaSemana}-${curso.id}`} className="p-1">
                     {editableRow === `${diaSemana}-${curso.id}` && edit ? (
                       <input
                         autocomplete="off"
@@ -206,7 +206,7 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
                         type="text"
                         onChange={handleChange}
                         value={value[`${diaSemana}-link-${curso.id}`] ?? ""}
-                        className="text-black rounded-md p-2 w-full outline-none"
+                        className="text-black rounded-md p-1 w-full outline-none"
                       />
                     ) : (
                       <a
@@ -219,7 +219,7 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
                       </a>
                     )}
                   </td>
-                  <td className="p-2">
+                  <td className="p-1">
                     <button
                       onClick={(e) => {
                         setEdit(!edit);
@@ -278,14 +278,14 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
                           }
                         }
                       }}
-                      className="p-4 bg-blue-500 rounded-2xl m-2 font-bold"
+                      className="p-2 bg-blue-500 rounded-2xl m-2 font-bold"
                     >
                       {edit && editableRow === `${diaSemana}-${curso.id}`
                         ? "Salvar"
                         : "Editar"}
                     </button>
                   </td>
-                  <td className="p-2">
+                  <td className="p-1">
                     <button
                       onClick={() => {
                         if (
@@ -333,7 +333,7 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
                             .catch((err) => console.log(err));
                         }
                       }}
-                      className="p-4 bg-red-400 rounded-2xl m-2 font-bold"
+                      className="p-2 bg-red-400 rounded-2xl m-2 font-bold"
                     >
                       Deletar
                     </button>
@@ -341,7 +341,7 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
                 </tr>
               );
             })}
-            <tr className="border-b-8 border-blue-500 mx-12 mb-12 rounded-b-lg" />
+            <tr className="mx-12 mb-12 rounded-b-lg" />
           </tbody>
         </table>
       </div>

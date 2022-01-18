@@ -28,7 +28,9 @@ export default function Home({ urls }) {
   const [aulasQuarta, setAulasQuarta] = useState([]);
   const [aulasQuinta, setAulasQuinta] = useState([]);
   const [aulasSabado, setAulasSabado] = useState([]);
+
   const [refresh, setRefresh] = useState(false);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -52,7 +54,7 @@ export default function Home({ urls }) {
     <div className="App">
       <header className="App-header">
         {aulasTerca[0] ? (
-          <div>
+          <>
             <ClassesCard
               urls={urls}
               aulas={aulasTerca}
@@ -77,7 +79,7 @@ export default function Home({ urls }) {
               diaSemana="sabado"
               setRefresh={setRefresh}
             />
-          </div>
+          </>
         ) : (
           <Loader />
         )}

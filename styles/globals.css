@@ -17,10 +17,18 @@ code {
 }
 
 tr:nth-child(even) {
-  background-color: dodgerblue;
+  @apply bg-blue-500;
 }
 
 tr:nth-child(odd) {
+  @apply bg-blue-500;
+}
+
+tr:nth-child(odd):hover {
+  @apply bg-blue-400;
+}
+
+tr:nth-child(even):hover {
   @apply bg-blue-400;
 }
 
