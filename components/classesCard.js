@@ -41,9 +41,9 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
       <p className="my-12 text-4xl text-blue-400">{dia[diaSemana]}</p>
       <button
         onClick={() => handleInsertion()}
-        className="bg-blue-500 p-1 text-white rounded-t-xl outline-none font-bold"
+        className="bg-blue-500 p-2 text-white rounded-t-xl outline-none font-bold"
       >
-        Cadastrar nova aula de {dia[diaSemana]}
+        Cadastrar nova aula de {dia[diaSemana].toLowerCase()}
       </button>
       <div
         border
