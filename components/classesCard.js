@@ -29,6 +29,7 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
 
     setValue(cursoArray);
   }, [aulas, diaSemana]);
+
   const dia = {
     terca: "Terça",
     quarta: "Quarta",
@@ -36,11 +37,159 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
     sabado: "Sábado",
   };
 
+  const saveCourse = () => {
+    if (
+      // eslint-disable-next-line no-restricted-globals
+      confirm("Deseja salvar as alterações realizadas ?")
+    ) {
+      setInserting(false);
+      let payload = {
+        diaSemana: diaSemana,
+        novaAula: {
+          link: value["link-novo-curso"],
+          nome: value["nome-novo-curso"],
+          horario: value["horario-novo-curso"],
+        },
+      };
+
+      const authToken = localStorage.getItem("authToken") || "";
+      fetch(urls.adicionar, {
+        headers: {
+          "Content-Type": "Application/json",
+          "x-access-token": authToken,
+        },
+        method: "POST",
+        body: JSON.stringify(payload),
+      })
+        .then((res) => {
+          if (res.status === 403 || res.status === 401) {
+            alert(
+              "Você precisa estar logado para cadastrar novos cursos, por favor realize o login e tente novamente."
+            );
+            router.replace("/login");
+          }
+
+          if (res.status === 200) {
+            alert("Aula cadastrada com sucesso");
+            setRefresh((prevState) => !prevState);
+          }
+        })
+        .then((res) => {
+          if (res.ok === 1) {
+            alert("Aula cadastrada com sucesso");
+          } else {
+            alert("Erro ao cadastrar aula");
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  const deleteCourse = (curso) => {
+    if (
+      // eslint-disable-next-line no-restricted-globals
+      confirm(`Tem certeza que deseja deletar o curso ${curso.nome} ?`)
+    ) {
+      let updatedData = {
+        diaSemana: diaSemana,
+        aula: { id: curso.id },
+      };
+
+      const authToken = localStorage.getItem("authToken") || "";
+
+      fetch(urls.adicionar, {
+        headers: {
+          "Content-Type": "Application/json",
+          "x-access-token": authToken,
+        },
+        method: "DELETE",
+        body: JSON.stringify(updatedData),
+      })
+        .then((res) => {
+          if (res.status === 403 || res.status === 401) {
+            alert(
+              "Você precisa estar logado para deletar cursos, por favor realize o login e tente novamente."
+            );
+            router.replace("/login");
+          }
+
+          if (res.status === 200) {
+            alert("Registro deletado com sucesso");
+            setRefresh((prevState) => !prevState);
+          }
+        })
+        .then((res) => {
+          if (res.ok === 1) {
+            alert("Registro deletado com sucesso");
+          } else {
+            alert("Erro ao atualizar registro");
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  const editCourse = (e, diaSemana, id) => {
+    setEdit(!edit);
+    setEditableRow(`${diaSemana}-${id}`);
+    if (e.target.innerText === "Salvar") {
+      if (
+        // eslint-disable-next-line no-restricted-globals
+        confirm("Deseja salvar as alterações realizadas ?")
+      ) {
+        let novasAulas = {
+          id: id,
+          link: value[`${diaSemana}-link-${id}`],
+          nome: value[`${diaSemana}-nome-${id}`],
+          horario: value[`${diaSemana}-horario-${id}`],
+        };
+
+        let updatedData = {
+          diaSemana: diaSemana,
+          novasAulas: novasAulas,
+        };
+
+        const authToken = localStorage.getItem("authToken") || "";
+
+        fetch(urls.aulas, {
+          headers: {
+            "Content-Type": "Application/json",
+            "x-access-token": authToken,
+          },
+          method: "PUT",
+          body: JSON.stringify(updatedData),
+        })
+          .then((res) => {
+            if (res.status === 403 || res.status === 401) {
+              alert(
+                "Você precisa estar logado para editar registros, por favor realize o login e tente novamente."
+              );
+              router.replace("/login");
+            }
+
+            if (res.status === 200) {
+              alert("Registro atualizado com sucesso");
+            }
+          })
+          .then((res) => {
+            if (res.ok === 1) {
+              alert("Registro atualizado com sucesso");
+            } else {
+              alert("Erro ao atualizar registro");
+            }
+          })
+          .catch((err) => console.log(err));
+      } else {
+        setRefresh((prevState) => !prevState);
+      }
+    }
+  };
+
   return (
     <div id={diaSemana}>
       <p className="my-12 text-4xl text-blue-400">{dia[diaSemana]}</p>
       <button
-        onClick={() => handleInsertion()}
+        onClick={handleInsertion}
         className="bg-blue-500 hover:bg-blue-400 p-2 text-white rounded-t-xl outline-none font-bold"
       >
         Cadastrar novo curso
@@ -95,54 +244,7 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
                 </td>
                 <td className="p-1">
                   <button
-                    onClick={() => {
-                      if (
-                        // eslint-disable-next-line no-restricted-globals
-                        confirm("Deseja salvar as alterações realizadas ?")
-                      ) {
-                        setInserting(false);
-                        let payload = {
-                          diaSemana: diaSemana,
-                          novaAula: {
-                            link: value["link-novo-curso"],
-                            nome: value["nome-novo-curso"],
-                            horario: value["horario-novo-curso"],
-                          },
-                        };
-
-                        const authToken =
-                          localStorage.getItem("authToken") || "";
-                        fetch(urls.adicionar, {
-                          headers: {
-                            "Content-Type": "Application/json",
-                            "x-access-token": authToken,
-                          },
-                          method: "POST",
-                          body: JSON.stringify(payload),
-                        })
-                          .then((res) => {
-                            if (res.status === 403 || res.status === 401) {
-                              alert(
-                                "Você precisa estar logado para cadastrar novos cursos, por favor realize o login e tente novamente."
-                              );
-                              router.replace("/login");
-                            }
-
-                            if (res.status === 200) {
-                              alert("Aula cadastrada com sucesso");
-                              setRefresh((prevState) => !prevState);
-                            }
-                          })
-                          .then((res) => {
-                            if (res.ok === 1) {
-                              alert("Aula cadastrada com sucesso");
-                            } else {
-                              alert("Erro ao cadastrar aula");
-                            }
-                          })
-                          .catch((err) => console.log(err));
-                      }
-                    }}
+                    onClick={saveCourse}
                     className="p-1 bg-blue-500 rounded-2xl m-2 font-bold"
                   >
                     Salvar
@@ -221,63 +323,7 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
                   </td>
                   <td className="p-1">
                     <button
-                      onClick={(e) => {
-                        setEdit(!edit);
-                        setEditableRow(`${diaSemana}-${curso.id}`);
-                        if (e.target.innerText === "Salvar") {
-                          if (
-                            // eslint-disable-next-line no-restricted-globals
-                            confirm("Deseja salvar as alterações realizadas ?")
-                          ) {
-                            let novasAulas = {
-                              id: curso.id,
-                              link: value[`${diaSemana}-link-${curso.id}`],
-                              nome: value[`${diaSemana}-nome-${curso.id}`],
-                              horario:
-                                value[`${diaSemana}-horario-${curso.id}`],
-                            };
-
-                            let updatedData = {
-                              diaSemana: diaSemana,
-                              novasAulas: novasAulas,
-                            };
-
-                            const authToken =
-                              localStorage.getItem("authToken") || "";
-
-                            fetch(urls.aulas, {
-                              headers: {
-                                "Content-Type": "Application/json",
-                                "x-access-token": authToken,
-                              },
-                              method: "PUT",
-                              body: JSON.stringify(updatedData),
-                            })
-                              .then((res) => {
-                                if (res.status === 403 || res.status === 401) {
-                                  alert(
-                                    "Você precisa estar logado para editar registros, por favor realize o login e tente novamente."
-                                  );
-                                  router.replace("/login");
-                                }
-
-                                if (res.status === 200) {
-                                  alert("Registro atualizado com sucesso");
-                                }
-                              })
-                              .then((res) => {
-                                if (res.ok === 1) {
-                                  alert("Registro atualizado com sucesso");
-                                } else {
-                                  alert("Erro ao atualizar registro");
-                                }
-                              })
-                              .catch((err) => console.log(err));
-                          } else {
-                            setRefresh((prevState) => !prevState);
-                          }
-                        }
-                      }}
+                      onClick={(e) => editCourse(e, diaSemana, curso.id)}
                       className="p-2 bg-blue-500 rounded-2xl m-2 font-bold"
                     >
                       {edit && editableRow === `${diaSemana}-${curso.id}`
@@ -287,52 +333,7 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
                   </td>
                   <td className="p-1">
                     <button
-                      onClick={() => {
-                        if (
-                          // eslint-disable-next-line no-restricted-globals
-                          confirm(
-                            `Tem certeza que deseja deletar o curso ${curso.nome} ?`
-                          )
-                        ) {
-                          let updatedData = {
-                            diaSemana: diaSemana,
-                            aula: { id: curso.id },
-                          };
-
-                          const authToken =
-                            localStorage.getItem("authToken") || "";
-
-                          fetch(urls.adicionar, {
-                            headers: {
-                              "Content-Type": "Application/json",
-                              "x-access-token": authToken,
-                            },
-                            method: "DELETE",
-                            body: JSON.stringify(updatedData),
-                          })
-                            .then((res) => {
-                              if (res.status === 403 || res.status === 401) {
-                                alert(
-                                  "Você precisa estar logado para deletar cursos, por favor realize o login e tente novamente."
-                                );
-                                router.replace("/login");
-                              }
-
-                              if (res.status === 200) {
-                                alert("Registro deletado com sucesso");
-                                setRefresh((prevState) => !prevState);
-                              }
-                            })
-                            .then((res) => {
-                              if (res.ok === 1) {
-                                alert("Registro deletado com sucesso");
-                              } else {
-                                alert("Erro ao atualizar registro");
-                              }
-                            })
-                            .catch((err) => console.log(err));
-                        }
-                      }}
+                      onClick={() => deleteCourse(curso)}
                       className="p-2 bg-red-400 rounded-2xl m-2 font-bold"
                     >
                       Deletar
