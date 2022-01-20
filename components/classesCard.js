@@ -188,23 +188,46 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
 
   return (
     <div id={selectedDay}>
-      <select
-        onChange={(e) => {
-          setSelectedDay(e.target.value);
-        }}
-        className="my-12 outline-none text-2xl p-2 bg-blue-500 rounded-md mt-4"
-      >
-        <option value="terca">Aulas de terça</option>
-        <option value="quarta">Aulas de quarta</option>
-        <option value="quinta">Aulas de quinta</option>
-        <option value="sabado">Aulas de sábado</option>
-      </select>
+      <div>
+        <button
+          className={`${
+            selectedDay === "terca" ? "" : "opacity-30 hover:opacity-100"
+          } bg-blue-500 p-2 m-2 rounded-lg`}
+          onClick={() => setSelectedDay("terca")}
+        >
+          Aulas de terça
+        </button>
+        <button
+          className={`${
+            selectedDay === "quarta" ? "" : "opacity-30 hover:opacity-100"
+          } bg-blue-500 p-2 m-2 rounded-lg`}
+          onClick={() => setSelectedDay("quarta")}
+        >
+          Aulas de quarta
+        </button>
+        <button
+          className={`${
+            selectedDay === "quinta" ? "" : "opacity-30 hover:opacity-100"
+          } bg-blue-500 p-2 m-2 rounded-lg`}
+          onClick={() => setSelectedDay("quinta")}
+        >
+          Aulas de quinta
+        </button>
+        <button
+          className={`${
+            selectedDay === "sabado" ? "" : "opacity-30 hover:opacity-100"
+          } bg-blue-500 p-2 m-2 rounded-lg`}
+          onClick={() => setSelectedDay("sabado")}
+        >
+          Aulas de sábado
+        </button>
+      </div>
       <br />
       <button
         onClick={handleInsertion}
         className="bg-blue-500 hover:bg-blue-400 p-2 text-white rounded-t-xl outline-none font-bold"
       >
-        Cadastrar novo curso de {dia[selectedDay]}
+        Cadastrar novo curso
       </button>
       <div
         className="-t-8 border-blue-500 mx-12 mb-12 rounded-lg"
