@@ -378,7 +378,6 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                 </tr>
               );
             })}
-            <tr className="mx-12 mb-12 rounded-b-lg" />
           </tbody>
         </table>
       </div>
