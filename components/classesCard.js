@@ -279,7 +279,7 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                 <td className="p-1">
                   <button
                     onClick={saveCourse}
-                    className="p-1 bg-blue-500 rounded-2xl m-2 font-bold"
+                    className="p-1 bg-blue-500 rounded-md m-2 font-bold"
                   >
                     Salvar
                   </button>
@@ -287,7 +287,7 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                 <td className="p-1">
                   <button
                     onClick={() => setInserting(false)}
-                    className="p-1 bg-red-400 rounded-2xl m-2 font-bold"
+                    className="p-1 bg-red-400 rounded-md m-2 font-bold"
                   >
                     Cancelar
                   </button>
@@ -360,7 +360,7 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                   <td className="p-1">
                     <button
                       onClick={(e) => editCourse(e, selectedDay, curso.id)}
-                      className="p-2 bg-blue-500 rounded-2xl m-2 font-bold"
+                      className="p-2 bg-blue-500 rounded-md m-2 font-bold"
                     >
                       {edit && editableRow === `${selectedDay}-${curso.id}`
                         ? "Salvar"
@@ -370,7 +370,7 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                   <td className="p-1">
                     <button
                       onClick={() => deleteCourse(curso)}
-                      className="p-2 bg-red-400 rounded-2xl m-2 font-bold"
+                      className="p-2 bg-red-400 rounded-md m-2 font-bold"
                     >
                       Deletar
                     </button>
