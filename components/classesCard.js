@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
+const ClassesCard = ({ urls, aulas, setRefresh }) => {
   const [value, setValue] = useState({});
   const [inserting, setInserting] = useState(false);
   const [editableRow, setEditableRow] = useState(0);
   const [edit, setEdit] = useState(false);
+  const [selectedDay, setSelectedDay] = useState("terca");
   const router = useRouter();
 
   const handleChange = (e) => {
@@ -21,14 +22,14 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
 
   useEffect(() => {
     const cursoArray = [];
-    aulas.forEach((curso) => {
-      cursoArray[`${diaSemana}-horario-${curso.id}`] = curso.horario;
-      cursoArray[`${diaSemana}-link-${curso.id}`] = curso.link;
-      cursoArray[`${diaSemana}-nome-${curso.id}`] = curso.nome;
+    aulas[selectedDay].forEach((curso) => {
+      cursoArray[`${selectedDay}-horario-${curso.id}`] = curso.horario;
+      cursoArray[`${selectedDay}-link-${curso.id}`] = curso.link;
+      cursoArray[`${selectedDay}-nome-${curso.id}`] = curso.nome;
     });
 
     setValue(cursoArray);
-  }, [aulas, diaSemana]);
+  }, [aulas[selectedDay], selectedDay]);
 
   const dia = {
     terca: "Terça",
@@ -44,7 +45,7 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
     ) {
       setInserting(false);
       let payload = {
-        diaSemana: diaSemana,
+        diaSemana: selectedDay,
         novaAula: {
           link: value["link-novo-curso"],
           nome: value["nome-novo-curso"],
@@ -91,7 +92,7 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
       confirm(`Tem certeza que deseja deletar o curso ${curso.nome} ?`)
     ) {
       let updatedData = {
-        diaSemana: diaSemana,
+        diaSemana: selectedDay,
         aula: { id: curso.id },
       };
 
@@ -129,9 +130,9 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
     }
   };
 
-  const editCourse = (e, diaSemana, id) => {
+  const editCourse = (e, selectedDay, id) => {
     setEdit(!edit);
-    setEditableRow(`${diaSemana}-${id}`);
+    setEditableRow(`${selectedDay}-${id}`);
     if (e.target.innerText === "Salvar") {
       if (
         // eslint-disable-next-line no-restricted-globals
@@ -139,13 +140,13 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
       ) {
         let novasAulas = {
           id: id,
-          link: value[`${diaSemana}-link-${id}`],
-          nome: value[`${diaSemana}-nome-${id}`],
-          horario: value[`${diaSemana}-horario-${id}`],
+          link: value[`${selectedDay}-link-${id}`],
+          nome: value[`${selectedDay}-nome-${id}`],
+          horario: value[`${selectedDay}-horario-${id}`],
         };
 
         let updatedData = {
-          diaSemana: diaSemana,
+          diaSemana: selectedDay,
           novasAulas: novasAulas,
         };
 
@@ -186,16 +187,26 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
   };
 
   return (
-    <div id={diaSemana}>
-      <p className="my-12 text-4xl text-blue-400">{dia[diaSemana]}</p>
+    <div id={selectedDay}>
+      <select
+        onChange={(e) => {
+          setSelectedDay(e.target.value);
+        }}
+        className="my-12 outline-none text-2xl p-2 bg-blue-500 rounded-md mt-4"
+      >
+        <option value="terca">Aulas de terça</option>
+        <option value="quarta">Aulas de quarta</option>
+        <option value="quinta">Aulas de quinta</option>
+        <option value="sabado">Aulas de sábado</option>
+      </select>
+      <br />
       <button
         onClick={handleInsertion}
         className="bg-blue-500 hover:bg-blue-400 p-2 text-white rounded-t-xl outline-none font-bold"
       >
-        Cadastrar novo curso
+        Cadastrar novo curso de {dia[selectedDay]}
       </button>
       <div
-        border
         className="-t-8 border-blue-500 mx-12 mb-12 rounded-lg"
         style={{ textAlignLast: "center" }}
       >
@@ -214,7 +225,7 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
               <tr>
                 <td className="p-1">
                   <input
-                    autocomplete="off"
+                    autoComplete="off"
                     name="nome-novo-curso"
                     placeholder="Ex: Doutrina e Convênios"
                     type="text"
@@ -224,7 +235,7 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
                 </td>
                 <td className="p-1">
                   <input
-                    autocomplete="off"
+                    autoComplete="off"
                     name="horario-novo-curso"
                     placeholder="Ex: 09h30"
                     type="text"
@@ -234,7 +245,7 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
                 </td>
                 <td className="p-1">
                   <input
-                    autocomplete="off"
+                    autoComplete="off"
                     name="link-novo-curso"
                     placeholder="Ex: https://zoom.us/j/95927244033?"
                     type="text"
@@ -260,61 +271,63 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
                 </td>
               </tr>
             ) : null}
-            {aulas.map((curso) => {
+            {aulas[selectedDay].map((curso) => {
               return (
                 <tr key={curso.id}>
-                  <td id={`${diaSemana}-${curso.id}`} className="p-1">
-                    {editableRow === `${diaSemana}-${curso.id}` && edit ? (
+                  <td id={`${selectedDay}-${curso.id}`} className="p-1">
+                    {editableRow === `${selectedDay}-${curso.id}` && edit ? (
                       <input
-                        autocomplete="off"
+                        autoComplete="off"
                         placeholder="digite o novo nome do curso"
-                        name={`${diaSemana}-nome-${curso.id}`}
+                        name={`${selectedDay}-nome-${curso.id}`}
                         type="text"
                         onChange={handleChange}
-                        value={value[`${diaSemana}-nome-${curso.id}`]}
+                        value={value[`${selectedDay}-nome-${curso.id}`]}
                         className="text-black rounded-md p-1 outline-none"
                       />
                     ) : (
                       <p>
-                        {value[`${diaSemana}-nome-${curso.id}`] ?? curso.nome}
+                        {value[`${selectedDay}-nome-${curso.id}`] ?? curso.nome}
                       </p>
                     )}
                   </td>
-                  <td id={`horario-${diaSemana}-${curso.id}`} className="p-1">
-                    {editableRow === `${diaSemana}-${curso.id}` && edit ? (
+                  <td id={`horario-${selectedDay}-${curso.id}`} className="p-1">
+                    {editableRow === `${selectedDay}-${curso.id}` && edit ? (
                       <input
-                        autocomplete="off"
-                        id={`input-${diaSemana}-${curso.id}`}
+                        autoComplete="off"
+                        id={`input-${selectedDay}-${curso.id}`}
                         placeholder="digite o novo horário do curso"
-                        name={`${diaSemana}-horario-${curso.id}`}
+                        name={`${selectedDay}-horario-${curso.id}`}
                         type="text"
                         onChange={handleChange}
-                        value={value[`${diaSemana}-horario-${curso.id}`] ?? ""}
+                        value={
+                          value[`${selectedDay}-horario-${curso.id}`] ?? ""
+                        }
                         className="text-black rounded-md p-1 w-32 outline-none"
                       />
                     ) : (
                       <p>
-                        {value[`${diaSemana}-horario-${curso.id}`] ??
+                        {value[`${selectedDay}-horario-${curso.id}`] ??
                           curso.horario}
                       </p>
                     )}
                   </td>
-                  <td id={`link-${diaSemana}-${curso.id}`} className="p-1">
-                    {editableRow === `${diaSemana}-${curso.id}` && edit ? (
+                  <td id={`link-${selectedDay}-${curso.id}`} className="p-1">
+                    {editableRow === `${selectedDay}-${curso.id}` && edit ? (
                       <input
-                        autocomplete="off"
+                        autoComplete="off"
                         placeholder="novo link"
-                        name={`${diaSemana}-link-${curso.id}`}
+                        name={`${selectedDay}-link-${curso.id}`}
                         type="text"
                         onChange={handleChange}
-                        value={value[`${diaSemana}-link-${curso.id}`] ?? ""}
+                        value={value[`${selectedDay}-link-${curso.id}`] ?? ""}
                         className="text-black rounded-md p-1 w-full outline-none"
                       />
                     ) : (
                       <a
                         className="underline"
                         href={
-                          value[`${diaSemana}-link-${curso.id}`] ?? curso.link
+                          value[`${selectedDay}-link-${curso.id}`] ?? curso.link
                         }
                       >
                         Assistir aula
@@ -323,10 +336,10 @@ const ClassesCard = ({ urls, aulas, diaSemana, setRefresh }) => {
                   </td>
                   <td className="p-1">
                     <button
-                      onClick={(e) => editCourse(e, diaSemana, curso.id)}
+                      onClick={(e) => editCourse(e, selectedDay, curso.id)}
                       className="p-2 bg-blue-500 rounded-2xl m-2 font-bold"
                     >
-                      {edit && editableRow === `${diaSemana}-${curso.id}`
+                      {edit && editableRow === `${selectedDay}-${curso.id}`
                         ? "Salvar"
                         : "Editar"}
                     </button>

@@ -54,32 +54,16 @@ export default function Home({ urls }) {
     <div className="App">
       <header className="App-header">
         {aulasTerca[0] ? (
-          <>
-            <ClassesCard
-              urls={urls}
-              aulas={aulasTerca}
-              diaSemana="terca"
-              setRefresh={setRefresh}
-            />
-            <ClassesCard
-              urls={urls}
-              aulas={aulasQuarta}
-              diaSemana="quarta"
-              setRefresh={setRefresh}
-            />
-            <ClassesCard
-              urls={urls}
-              aulas={aulasQuinta}
-              diaSemana="quinta"
-              setRefresh={setRefresh}
-            />
-            <ClassesCard
-              urls={urls}
-              aulas={aulasSabado}
-              diaSemana="sabado"
-              setRefresh={setRefresh}
-            />
-          </>
+          <ClassesCard
+            urls={urls}
+            aulas={{
+              terca: aulasTerca,
+              quarta: aulasQuarta,
+              quinta: aulasQuinta,
+              sabado: aulasSabado,
+            }}
+            setRefresh={setRefresh}
+          />
         ) : (
           <Loader />
         )}
