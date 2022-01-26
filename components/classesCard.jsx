@@ -222,8 +222,7 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
               <th className="rounded-tl-md">Curso</th>
               <th>Horário</th>
               <th>Link</th>
-              <th>Ações</th>
-              <th className="rounded-tr-md"></th>
+              <th className="rounded-tr-md">Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -257,20 +256,22 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                   />
                 </td>
                 <td className="p-1">
-                  <button
-                    onClick={saveCourse}
-                    className="py-1 px-2 bg-green-500 rounded-md m-2 font-bold"
-                  >
-                    Salvar
-                  </button>
-                </td>
-                <td className="p-1">
-                  <button
-                    onClick={() => setInserting(false)}
-                    className="p-1 px-2 bg-red-500 rounded-md m-2 font-bold"
-                  >
-                    Cancelar
-                  </button>
+                  <td>
+                    <button
+                      onClick={saveCourse}
+                      className="py-1 px-2 bg-green-500 rounded-md m-2 font-bold"
+                    >
+                      Salvar
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => setInserting(false)}
+                      className="p-1 px-2 bg-crimson rounded-md m-2 font-bold"
+                    >
+                      Cancelar
+                    </button>
+                  </td>
                 </td>
               </tr>
             ) : null}
@@ -341,22 +342,24 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                     )}
                   </td>
                   <td className="p-1">
-                    <button
-                      onClick={(e) => editCourse(e, selectedDay, curso.id)}
-                      className={`py-1 px-2 ${
-                        isInEditMode ? "bg-green-500" : "bg-dodger"
-                      } rounded-md m-2 font-bold`}
-                    >
-                      {isInEditMode ? "Salvar" : "Editar"}
-                    </button>
-                  </td>
-                  <td className="p-1">
-                    <button
-                      onClick={() => deleteCourse(curso)}
-                      className="py-1 px-2 bg-crimson rounded-md m-2 font-bold"
-                    >
-                      Deletar
-                    </button>
+                    <td>
+                      <button
+                        onClick={(e) => editCourse(e, selectedDay, curso.id)}
+                        className={`py-1 px-2 ${
+                          isInEditMode ? "bg-green-500" : "bg-dodger"
+                        } rounded-md m-2 font-bold`}
+                      >
+                        {isInEditMode ? "Salvar" : "Editar"}
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => deleteCourse(curso)}
+                        className="py-1 px-2 bg-crimson rounded-md m-2 font-bold"
+                      >
+                        Deletar
+                      </button>
+                    </td>
                   </td>
                 </tr>
               );
