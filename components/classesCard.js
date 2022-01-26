@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { ButtonTab } from "./buttonTab";
 
 const ClassesCard = ({ urls, aulas, setRefresh }) => {
   const [value, setValue] = useState({});
@@ -30,13 +31,6 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
 
     setValue(cursoArray);
   }, [aulas[selectedDay], selectedDay]);
-
-  const dia = {
-    terca: "Terça",
-    quarta: "Quarta",
-    quinta: "Quinta",
-    sabado: "Sábado",
-  };
 
   const saveCourse = () => {
     if (
@@ -189,53 +183,41 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
   return (
     <div id={selectedDay}>
       <div>
-        <button
-          className={`${
-            selectedDay === "terca" ? "" : "opacity-30 hover:opacity-100"
-          } bg-blue-500 p-2 m-2 rounded-lg`}
-          onClick={() => setSelectedDay("terca")}
-        >
-          Aulas de terça
-        </button>
-        <button
-          className={`${
-            selectedDay === "quarta" ? "" : "opacity-30 hover:opacity-100"
-          } bg-blue-500 p-2 m-2 rounded-lg`}
-          onClick={() => setSelectedDay("quarta")}
-        >
-          Aulas de quarta
-        </button>
-        <button
-          className={`${
-            selectedDay === "quinta" ? "" : "opacity-30 hover:opacity-100"
-          } bg-blue-500 p-2 m-2 rounded-lg`}
-          onClick={() => setSelectedDay("quinta")}
-        >
-          Aulas de quinta
-        </button>
-        <button
-          className={`${
-            selectedDay === "sabado" ? "" : "opacity-30 hover:opacity-100"
-          } bg-blue-500 p-2 m-2 rounded-lg`}
-          onClick={() => setSelectedDay("sabado")}
-        >
-          Aulas de sábado
-        </button>
+        <ButtonTab
+          day="terca"
+          selectedDay={selectedDay}
+          setSelectedDay={setSelectedDay}
+        />
+        <ButtonTab
+          day="quarta"
+          selectedDay={selectedDay}
+          setSelectedDay={setSelectedDay}
+        />
+        <ButtonTab
+          day="quinta"
+          selectedDay={selectedDay}
+          setSelectedDay={setSelectedDay}
+        />
+        <ButtonTab
+          day="sabado"
+          selectedDay={selectedDay}
+          setSelectedDay={setSelectedDay}
+        />
       </div>
       <br />
       <button
         onClick={handleInsertion}
-        className="bg-blue-500 hover:bg-blue-400 p-2 text-white rounded-t-xl outline-none font-bold"
+        className="bg-crimson hover:bg-red-400 py-1 px-2 text-white rounded-t-md outline-none font-bold"
       >
         Cadastrar novo curso
       </button>
       <div
-        className="-t-8 border-blue-500 mx-12 mb-12 rounded-lg"
+        className="-t-8 border-blue-600 mx-12 mb-12 rounded-md"
         style={{ textAlignLast: "center" }}
       >
         <table className="w-full">
           <thead>
-            <tr className="bg-blue-500" style={{ backgroundColor: "#3B82F6" }}>
+            <tr style={{ backgroundColor: "crimson" }}>
               <th>Curso</th>
               <th>Horário</th>
               <th>Link</th>
@@ -245,7 +227,7 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
           </thead>
           <tbody>
             {inserting ? (
-              <tr>
+              <tr className="bg-blue-100">
                 <td className="p-1">
                   <input
                     autoComplete="off"
@@ -279,7 +261,7 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                 <td className="p-1">
                   <button
                     onClick={saveCourse}
-                    className="p-1 bg-blue-500 rounded-md m-2 font-bold"
+                    className="py-1 px-2 bg-dodger rounded-md m-2 font-bold"
                   >
                     Salvar
                   </button>
@@ -287,7 +269,7 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                 <td className="p-1">
                   <button
                     onClick={() => setInserting(false)}
-                    className="p-1 bg-red-400 rounded-md m-2 font-bold"
+                    className="p-1 px-2 bg-red-500 rounded-md m-2 font-bold"
                   >
                     Cancelar
                   </button>
@@ -295,10 +277,16 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
               </tr>
             ) : null}
             {aulas[selectedDay].map((curso) => {
+              const isInEditMode =
+                editableRow === `${selectedDay}-${curso.id}` && edit;
+
               return (
-                <tr key={curso.id}>
+                <tr
+                  key={curso.id}
+                  className={`${isInEditMode ? "bg-blue-100" : "bg-white"}`}
+                >
                   <td id={`${selectedDay}-${curso.id}`} className="p-1">
-                    {editableRow === `${selectedDay}-${curso.id}` && edit ? (
+                    {isInEditMode ? (
                       <input
                         autoComplete="off"
                         placeholder="digite o novo nome do curso"
@@ -309,13 +297,13 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                         className="text-black rounded-md p-1 outline-none"
                       />
                     ) : (
-                      <p>
+                      <p className="text-black px-2">
                         {value[`${selectedDay}-nome-${curso.id}`] ?? curso.nome}
                       </p>
                     )}
                   </td>
                   <td id={`horario-${selectedDay}-${curso.id}`} className="p-1">
-                    {editableRow === `${selectedDay}-${curso.id}` && edit ? (
+                    {isInEditMode ? (
                       <input
                         autoComplete="off"
                         id={`input-${selectedDay}-${curso.id}`}
@@ -329,14 +317,14 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                         className="text-black rounded-md p-1 w-32 outline-none"
                       />
                     ) : (
-                      <p>
+                      <p className="text-black px-2">
                         {value[`${selectedDay}-horario-${curso.id}`] ??
                           curso.horario}
                       </p>
                     )}
                   </td>
                   <td id={`link-${selectedDay}-${curso.id}`} className="p-1">
-                    {editableRow === `${selectedDay}-${curso.id}` && edit ? (
+                    {isInEditMode ? (
                       <input
                         autoComplete="off"
                         placeholder="novo link"
@@ -348,7 +336,7 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                       />
                     ) : (
                       <a
-                        className="underline"
+                        className="underline text-black px-2"
                         href={
                           value[`${selectedDay}-link-${curso.id}`] ?? curso.link
                         }
@@ -360,17 +348,15 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                   <td className="p-1">
                     <button
                       onClick={(e) => editCourse(e, selectedDay, curso.id)}
-                      className="p-2 bg-blue-500 rounded-md m-2 font-bold"
+                      className="py-1 px-2 bg-dodger rounded-md m-2 font-bold"
                     >
-                      {edit && editableRow === `${selectedDay}-${curso.id}`
-                        ? "Salvar"
-                        : "Editar"}
+                      {isInEditMode ? "Salvar" : "Editar"}
                     </button>
                   </td>
                   <td className="p-1">
                     <button
                       onClick={() => deleteCourse(curso)}
-                      className="p-2 bg-red-400 rounded-md m-2 font-bold"
+                      className="py-1 px-2 bg-crimson rounded-md m-2 font-bold"
                     >
                       Deletar
                     </button>
