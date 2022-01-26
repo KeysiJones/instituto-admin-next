@@ -11,7 +11,7 @@ function ButtonTab({ selectedDay, setSelectedDay, day }) {
       className={`${
         selectedDay === day ? "" : "opacity-30 hover:opacity-100"
       } bg-crimson p-2 m-2 rounded-md`}
-      onClick={() => setSelectedDay(day)}
+      onClick={() => (selectedDay != day ? setSelectedDay(day) : null)}
     >
       Aulas de {displayDay[day]}
     </button>

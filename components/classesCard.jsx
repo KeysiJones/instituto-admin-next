@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { ButtonTab } from "./buttonTab";
+import { Input } from "./input";
 
 const ClassesCard = ({ urls, aulas, setRefresh }) => {
   const [value, setValue] = useState({});
@@ -218,19 +219,18 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
         <table className="w-full">
           <thead>
             <tr style={{ backgroundColor: "crimson" }}>
-              <th>Curso</th>
+              <th className="rounded-tl-md">Curso</th>
               <th>Horário</th>
               <th>Link</th>
               <th>Ações</th>
-              <th></th>
+              <th className="rounded-tr-md"></th>
             </tr>
           </thead>
           <tbody>
             {inserting ? (
               <tr className="bg-blue-100">
                 <td className="p-1">
-                  <input
-                    autoComplete="off"
+                  <Input
                     name="nome-novo-curso"
                     placeholder="Ex: Doutrina e Convênios"
                     type="text"
@@ -239,8 +239,7 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                   />
                 </td>
                 <td className="p-1">
-                  <input
-                    autoComplete="off"
+                  <Input
                     name="horario-novo-curso"
                     placeholder="Ex: 09h30"
                     type="text"
@@ -249,8 +248,7 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                   />
                 </td>
                 <td className="p-1">
-                  <input
-                    autoComplete="off"
+                  <Input
                     name="link-novo-curso"
                     placeholder="Ex: https://zoom.us/j/95927244033?"
                     type="text"
@@ -261,7 +259,7 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                 <td className="p-1">
                   <button
                     onClick={saveCourse}
-                    className="py-1 px-2 bg-dodger rounded-md m-2 font-bold"
+                    className="py-1 px-2 bg-green-500 rounded-md m-2 font-bold"
                   >
                     Salvar
                   </button>
@@ -287,8 +285,7 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                 >
                   <td id={`${selectedDay}-${curso.id}`} className="p-1">
                     {isInEditMode ? (
-                      <input
-                        autoComplete="off"
+                      <Input
                         placeholder="digite o novo nome do curso"
                         name={`${selectedDay}-nome-${curso.id}`}
                         type="text"
@@ -304,8 +301,7 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                   </td>
                   <td id={`horario-${selectedDay}-${curso.id}`} className="p-1">
                     {isInEditMode ? (
-                      <input
-                        autoComplete="off"
+                      <Input
                         id={`input-${selectedDay}-${curso.id}`}
                         placeholder="digite o novo horário do curso"
                         name={`${selectedDay}-horario-${curso.id}`}
@@ -325,8 +321,7 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                   </td>
                   <td id={`link-${selectedDay}-${curso.id}`} className="p-1">
                     {isInEditMode ? (
-                      <input
-                        autoComplete="off"
+                      <Input
                         placeholder="novo link"
                         name={`${selectedDay}-link-${curso.id}`}
                         type="text"
@@ -348,7 +343,9 @@ const ClassesCard = ({ urls, aulas, setRefresh }) => {
                   <td className="p-1">
                     <button
                       onClick={(e) => editCourse(e, selectedDay, curso.id)}
-                      className="py-1 px-2 bg-dodger rounded-md m-2 font-bold"
+                      className={`py-1 px-2 ${
+                        isInEditMode ? "bg-green-500" : "bg-dodger"
+                      } rounded-md m-2 font-bold`}
                     >
                       {isInEditMode ? "Salvar" : "Editar"}
                     </button>
