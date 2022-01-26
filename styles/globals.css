@@ -22,11 +22,26 @@ code {
     monospace;
 }
 
-tr:nth-child(odd):hover {
-  background-color: #c6d8ed;
+/* applies rounded borders to the last row */
+
+tr:nth-last-child(1) > td:nth-last-child(1) {
+  @apply rounded-br-md;
 }
 
-tr:nth-child(even):hover {
+tr:nth-last-child(1) > td:nth-child(1) {
+  @apply rounded-bl-md;
+}
+
+/* table shadow and rounded borders*/
+
+table {
+  @apply rounded-md;
+  box-shadow: -9px 16px 15px 5px #a9a9a9;
+}
+
+/* some table hover effects*/
+
+tr:hover {
   background-color: #c6d8ed;
 }
 
@@ -58,13 +73,4 @@ tr:nth-child(even):hover {
 
 .App-link {
   color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
